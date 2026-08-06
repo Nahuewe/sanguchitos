@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido de sánguches — oficina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+
+<body>
+
+    <header class="cabecera">
+        <div class="cabecera__marca">
+            <svg class="cabecera__icono" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 6C24 6 14 12 14 24C14 33 18 40 24 42C30 40 34 33 34 24C34 12 24 6 24 6Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+                <path d="M24 10V38" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M24 16C21 16 18.5 17.5 17 19M24 24C21 24 18.5 25.5 17 27M24 32C21 32 18.5 33.5 17 35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <div class="cabecera__texto">
+                <h1 class="cabecera__logo">Pedido de sánguches</h1>
+                <p class="cabecera__linea">Para la oficina</p>
+            </div>
+        </div>
+        <div class="cabecera__chip">
+            <span id="totalGeneral">$0</span>
+            <span class="cabecera__chip-label">total interno (con envío)</span>
+        </div>
+    </header>
+
+    <div class="barra-consulta">
+        <p class="barra-consulta__texto">¿No sabés qué sánguches y panes tienen hoy?</p>
+        <button type="button" id="btnConsultarDisponibilidad" class="boton-secundario">Preguntar disponibilidad</button>
+    </div>
+
+    <main class="mostrador">
+
+        <section class="armador">
+
+            <div class="paso">
+                <div class="paso__numero">01</div>
+                <div class="paso__contenido">
+                    <h2 class="paso__titulo">Elegí al comensal</h2>
+                    <div class="paso__fila-input">
+                        <input type="text" id="inputComensal" placeholder="Nombre del comensal" class="input-texto">
+                        <button type="button" id="btnAgregarComensal" class="boton-secundario">Sumar</button>
+                    </div>
+                    <div id="listaComensales" class="lista-chips"></div>
+                </div>
+            </div>
+
+            <div class="paso">
+                <div class="paso__numero">02</div>
+                <div class="paso__contenido">
+                    <h2 class="paso__titulo">Elegí el sánguche</h2>
+                    <div id="tabsCategorias" class="tabs-categorias"></div>
+                    <div id="listaSanguches" class="lista-sanguches"></div>
+                </div>
+            </div>
+
+            <div class="paso">
+                <div class="paso__numero">03</div>
+                <div class="paso__contenido">
+                    <h2 class="paso__titulo">Elegí el pan</h2>
+                    <p class="paso__ayuda">Los panes sin adicional ya están incluidos en este sánguche.</p>
+                    <div id="panesGrid" class="grilla-panes"></div>
+                </div>
+            </div>
+
+            <div class="paso">
+                <div class="paso__numero">04</div>
+                <div class="paso__contenido">
+                    <h2 class="paso__titulo">Sumá extras</h2>
+                    <div class="grupo-extras">
+                        <div class="grupo-extras__columna">
+                            <h3 class="grupo-extras__titulo">Especiales</h3>
+                            <div id="extrasEspeciales" class="lista-chips"></div>
+                        </div>
+                        <div class="grupo-extras__columna">
+                            <h3 class="grupo-extras__titulo">Simples</h3>
+                            <div id="extrasSimples" class="lista-chips"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="paso paso--final">
+                <div class="paso__numero">05</div>
+                <div class="paso__contenido">
+                    <h2 class="paso__titulo">Cantidad y agregado</h2>
+                    <div class="paso__fila-input">
+                        <input type="number" id="inputCantidad" value="1" min="1" class="input-texto input-texto--corto">
+                        <button type="button" id="btnAgregarItem" class="boton-primario" disabled>Agregar a la comanda</button>
+                    </div>
+                    <p id="resumenActual" class="resumen-actual">Elegí un sánguche y un pan para ver el precio.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <aside class="panel-comanda" id="panelComanda">
+            <div class="panel-comanda__cabecera">
+                <h2 class="panel-comanda__titulo">Comanda</h2>
+                <span class="panel-comanda__subtitulo">lo que se va a mandar por WhatsApp</span>
+            </div>
+            <div id="comanda" class="comanda"></div>
+            <div class="panel-comanda__pie">
+                <p class="panel-comanda__aviso">El mensaje que se manda al local no lleva nombres ni precios, solo los sánguches.</p>
+                <div class="panel-comanda__envio">
+                    <label for="inputEnvio">Envío (solo para nosotros)</label>
+                    <div class="panel-comanda__envio-input">
+                        <span>$</span>
+                        <input type="number" id="inputEnvio" min="0" value="0" placeholder="0">
+                    </div>
+                </div>
+                <div class="panel-comanda__total">
+                    <span>Total interno</span>
+                    <span id="totalGeneral2" class="panel-comanda__total-valor"></span>
+                </div>
+                <button type="button" id="btnEnviarWhatsapp" class="boton-whatsapp">Enviar pedido por WhatsApp</button>
+            </div>
+        </aside>
+
+    </main>
+
+    <div id="barraTotalMovil" class="barra-total-movil">
+        <div class="barra-total-movil__info">
+            <span class="barra-total-movil__label">Total interno</span>
+            <span id="totalGeneral3" class="barra-total-movil__valor">$0</span>
+        </div>
+        <button type="button" id="btnVerComanda" class="boton-primario">Ver comanda</button>
+    </div>
+
+    <div id="modalSucursales" class="modal">
+        <div class="modal__caja">
+            <h3 id="modalSucursalesTitulo" class="modal__titulo">Seleccioná la sucursal</h3>
+            <div id="listaSucursales" class="lista-sucursales"></div>
+            <div class="modal__acciones">
+                <button type="button" id="btnCerrarModalSucursales" class="boton-secundario">Cancelar</button>
+                <button type="button" id="btnConfirmarSucursal" class="boton-whatsapp">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal__caja">
+            <h3 class="modal__titulo modal__titulo--stamp">¿Seguro?</h3>
+            <p id="modalConfirmacionTexto" class="modal__texto"></p>
+            <div class="modal__acciones">
+                <button type="button" id="btnCancelarConfirmacion" class="boton-secundario">Cerrar</button>
+                <button type="button" id="btnAceptarConfirmacion" class="boton-peligro">Sí, sacalo</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="./js/data.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+
+</html>

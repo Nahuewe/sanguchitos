@@ -225,13 +225,21 @@ function renderComensales() {
         return;
     }
     estado.ordenComensales.forEach(nombre => {
-        const chip = document.createElement('button');
-        chip.type = 'button';
+        const chip = document.createElement('div');
         const activo = estado.comensalActivo === nombre;
         chip.className = 'chip-comensal' + (activo ? ' chip-comensal--activo' : '');
         const cantidadItems = (estado.comensales[nombre] || []).length;
-        chip.innerHTML = `<span>${nombre}</span>${cantidadItems > 0 ? `<span class="chip-comensal__contador">${cantidadItems}</span>` : ''}`;
-        chip.addEventListener('click', () => seleccionarComensal(nombre));
+        chip.innerHTML = `
+            <button type="button" class="chip-comensal__nombre">
+                <span>${nombre}</span>${cantidadItems > 0 ? `<span class="chip-comensal__contador">${cantidadItems}</span>` : ''}
+            </button>
+            <button type="button" class="chip-comensal__borrar" title="Eliminar comensal">×</button>
+        `;
+        chip.querySelector('.chip-comensal__nombre').addEventListener('click', () => seleccionarComensal(nombre));
+        chip.querySelector('.chip-comensal__borrar').addEventListener('click', (e) => {
+            e.stopPropagation();
+            confirmarEliminarComensal(nombre);
+        });
         contenedor.appendChild(chip);
     });
 }
@@ -420,6 +428,25 @@ function construirMensajeConsulta() {
     return 'Buen día! ¿Qué sándwiches y panes tienen disponibles hoy?';
 }
 
+function construirMensajeDesglose() {
+    const comensalesConItems = estado.ordenComensales.filter(nombre => (estado.comensales[nombre] || []).length > 0);
+    const cantidadPersonas = comensalesConItems.length;
+    const envioPorPersona = cantidadPersonas > 0 ? Math.round(estado.envio / cantidadPersonas) : 0;
+
+    let mensaje = 'Desglose de pagos — sánguches de la oficina\n\n';
+
+    comensalesConItems.forEach(nombre => {
+        estado.comensales[nombre].forEach(item => {
+            const precioItem = calcularSubtotalItem(item);
+            const nombreLinea = item.cantidad > 1 ? `${item.nombreSandwich} x${item.cantidad}` : item.nombreSandwich;
+            mensaje += `${nombre} - ${nombreLinea} ${formatearPrecio(precioItem)} - envío ${formatearPrecio(envioPorPersona)}\n`;
+        });
+    });
+
+    mensaje += `\nTotal a cobrar entre todos: ${formatearPrecio(calcularTotalGeneral())}`;
+    return mensaje;
+}
+
 function enviarWhatsapp(numero, mensaje) {
     const url = 'https://api.whatsapp.com/send?phone=' + numero + '&text=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
@@ -508,6 +535,20 @@ function configurarEventos() {
     document.getElementById('inputEnvio').addEventListener('input', function () {
         estado.envio = Math.max(0, parseFloat(this.value) || 0);
         actualizarTotales(calcularTotalGeneral());
+    });
+
+    document.getElementById('btnEnviarDesglose').addEventListener('click', () => {
+        if (!hayPedidosCargados()) {
+            mostrarToast('Todavía no hay ningún sánguche en la comanda', 'error');
+            return;
+        }
+        const inputNumero = document.getElementById('inputNumeroDesglose');
+        const numero = inputNumero.value.replace(/\D/g, '');
+        if (!numero) {
+            mostrarToast('Escribí el número de WhatsApp para el desglose', 'error');
+            return;
+        }
+        enviarWhatsapp(numero, construirMensajeDesglose());
     });
 
     document.getElementById('btnCancelarConfirmacion').addEventListener('click', cerrarModalConfirmacion);

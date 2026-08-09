@@ -113,7 +113,7 @@
                     <label for="inputEnvio">Envío (solo para nosotros)</label>
                     <div class="panel-comanda__envio-input">
                         <span>$</span>
-                        <input type="number" id="inputEnvio" min="0" value="0" placeholder="0">
+                        <input type="number" id="inputEnvio" min="0" placeholder="0">
                     </div>
                 </div>
                 <div class="panel-comanda__total">
@@ -121,6 +121,16 @@
                     <span id="totalGeneral2" class="panel-comanda__total-valor"></span>
                 </div>
                 <button type="button" id="btnEnviarWhatsapp" class="boton-whatsapp">Enviar pedido por WhatsApp</button>
+
+                <div class="panel-comanda__separador">
+                    <span>Cobro individual</span>
+                </div>
+                <p class="panel-comanda__aviso">Manda un mensaje aparte con lo que le toca pagar a cada uno, envío incluido.</p>
+                <div class="panel-comanda__desglose-input">
+                    <span>+</span>
+                    <input type="tel" id="inputNumeroDesglose" placeholder="Número de WhatsApp, ej: 5493834000000">
+                </div>
+                <button type="button" id="btnEnviarDesglose" class="boton-desglose">Enviar desglose de pagos</button>
             </div>
         </aside>
 

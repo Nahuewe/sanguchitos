@@ -271,11 +271,9 @@ input {
 
 .chip-comensal {
     display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    align-items: stretch;
     background: #fff;
     border: 2px solid var(--tinta);
-    padding: 0.4rem 0.75rem;
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -286,12 +284,43 @@ input {
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
 }
 
+.chip-comensal__nombre {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    padding: 0.4rem 0.7rem;
+}
+
 .chip-comensal__contador {
     font-family: var(--fuente-mono);
     background: var(--bronce);
     color: var(--crema);
     font-size: 0.7rem;
     padding: 0.05rem 0.4rem;
+}
+
+.chip-comensal__borrar {
+    background: none;
+    border: none;
+    border-left: 2px solid var(--tinta);
+    color: var(--sello);
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0 0.55rem;
+}
+
+.chip-comensal--activo .chip-comensal__borrar {
+    border-left-color: var(--crema);
+    color: var(--crema);
+}
+
+.chip-comensal__borrar:hover {
+    background: var(--sello);
+    color: var(--crema);
 }
 
 .tabs-categorias {
@@ -702,6 +731,76 @@ input {
     font-family: var(--fuente-mono);
     font-size: 1.4rem;
     font-weight: 700;
+}
+
+.panel-comanda__separador {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 1.2rem 0 0.7rem;
+}
+
+.panel-comanda__separador::before,
+.panel-comanda__separador::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--crema-sombra) 0, var(--crema-sombra) 6px, transparent 6px, transparent 11px);
+}
+
+.panel-comanda__separador span {
+    font-family: var(--fuente-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bronce);
+    white-space: nowrap;
+}
+
+.panel-comanda__desglose-input {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #fff;
+    border: 2px solid var(--tinta);
+    padding: 0.3rem 0.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.panel-comanda__desglose-input span {
+    font-family: var(--fuente-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--oliva-medio);
+}
+
+.panel-comanda__desglose-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: var(--fuente-mono);
+    font-size: 0.85rem;
+    min-width: 0;
+}
+
+.boton-desglose {
+    border: 2px solid var(--tinta);
+    background: var(--crema);
+    color: var(--tinta);
+    background-image: repeating-linear-gradient(-45deg, transparent 0, transparent 5px, rgba(44, 42, 28, 0.05) 5px, rgba(44, 42, 28, 0.05) 10px);
+    width: 100%;
+    padding: 0.75rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.boton-desglose:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
 }
 
 .modal {

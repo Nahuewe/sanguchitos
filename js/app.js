@@ -11,6 +11,7 @@ const estado = {
 };
 
 let contadorItem = 0;
+let itemEditando = null;
 
 function generarIdItem() {
     contadorItem += 1;
@@ -249,21 +250,103 @@ function agregarItemALaComanda() {
         mostrarToast('Elegí o sumá un comensal primero', 'error');
         return;
     }
+
     if (!estado.sandwichSeleccionado || !estado.panSeleccionado) {
         mostrarToast('Faltan datos del sánguche', 'error');
         return;
     }
 
     const cantidadInput = document.getElementById('inputCantidad');
-    const cantidad = Math.max(1, parseInt(cantidadInput.value, 10) || 1);
+    const cantidad = Math.max(
+        1,
+        parseInt(cantidadInput.value, 10) || 1
+    );
+
+    const extras = Array.from(estado.extrasSeleccionados).map(nombre => ({
+        nombre,
+        precio: precioDeExtra(nombre)
+    }));
+
+    /*
+     * ==========================================
+     * MODO EDICIÓN
+     * ==========================================
+     */
+
+    if (itemEditando) {
+        const {
+            nombre,
+            itemId
+        } = itemEditando;
+
+        const items = estado.comensales[nombre] || [];
+
+        const indice = items.findIndex(
+            item => item.id === itemId
+        );
+
+        if (indice !== -1) {
+            items[indice] = {
+                ...items[indice],
+
+                nombreSandwich: estado.sandwichSeleccionado.nombre,
+                precioSandwich: estado.sandwichSeleccionado.precio,
+
+                pan: estado.panSeleccionado,
+                precioPan: costoPan(estado.panSeleccionado),
+
+                extras,
+
+                cantidad
+            };
+        }
+
+        // Salir del modo edición
+        itemEditando = null;
+
+        const boton = document.getElementById('btnAgregarItem');
+        boton.textContent = 'Agregar a la comanda';
+        boton.classList.remove('boton-primario--editar');
+
+        // Limpiar selección
+        estado.sandwichSeleccionado = null;
+        estado.panSeleccionado = null;
+        estado.extrasSeleccionados.clear();
+
+        cantidadInput.value = 1;
+
+        renderSanguches();
+        renderPanes();
+        renderExtras();
+        renderComensales();
+        renderComanda();
+        actualizarResumenActual();
+
+        mostrarToast(
+            `Pedido de ${nombre} actualizado`,
+            'ok'
+        );
+
+        return;
+    }
+
+    /*
+     * ==========================================
+     * MODO NUEVO PEDIDO
+     * ==========================================
+     */
 
     const item = {
         id: generarIdItem(),
+
         nombreSandwich: estado.sandwichSeleccionado.nombre,
         precioSandwich: estado.sandwichSeleccionado.precio,
+
         pan: estado.panSeleccionado,
         precioPan: costoPan(estado.panSeleccionado),
-        extras: Array.from(estado.extrasSeleccionados).map(nombre => ({ nombre, precio: precioDeExtra(nombre) })),
+
+        extras,
+
         cantidad
     };
 
@@ -272,6 +355,7 @@ function agregarItemALaComanda() {
     estado.sandwichSeleccionado = null;
     estado.panSeleccionado = null;
     estado.extrasSeleccionados.clear();
+
     cantidadInput.value = 1;
 
     renderSanguches();
@@ -280,7 +364,11 @@ function agregarItemALaComanda() {
     renderComensales();
     renderComanda();
     actualizarResumenActual();
-    mostrarToast(`Sumado a la comanda de ${estado.comensalActivo}`, 'ok');
+
+    mostrarToast(
+        `Sumado a la comanda de ${estado.comensalActivo}`,
+        'ok'
+    );
 }
 
 function cambiarCantidadItem(nombre, itemId, delta) {
@@ -309,6 +397,68 @@ function confirmarEliminarComensal(nombre) {
             actualizarResumenActual();
         }
     );
+}
+
+function editarItem(nombre, itemId) {
+    const items = estado.comensales[nombre] || [];
+    const item = items.find(i => i.id === itemId);
+
+    if (!item) return;
+
+    itemEditando = {
+        nombre,
+        itemId
+    };
+
+    estado.comensalActivo = nombre;
+
+    let sandwichEncontrado = null;
+    let categoriaEncontrada = null;
+
+    Object.entries(CATEGORIAS).forEach(([clave, categoria]) => {
+        const sandwich = categoria.sanguches.find(
+            s => s.nombre === item.nombreSandwich
+        );
+
+        if (sandwich) {
+            sandwichEncontrado = sandwich;
+            categoriaEncontrada = clave;
+        }
+    });
+
+    if (!sandwichEncontrado) {
+        mostrarToast('No se encontró el sánguche del pedido', 'error');
+        return;
+    }
+
+    estado.categoriaActiva = categoriaEncontrada;
+
+    estado.sandwichSeleccionado = sandwichEncontrado;
+    estado.panSeleccionado = item.pan;
+
+    estado.extrasSeleccionados = new Set(
+        item.extras.map(extra => extra.nombre)
+    );
+
+    document.getElementById('inputCantidad').value = item.cantidad;
+
+    const boton = document.getElementById('btnAgregarItem');
+    boton.textContent = 'Guardar cambios';
+    boton.classList.add('boton-primario--editar');
+
+    renderCategorias();
+    renderSanguches();
+    renderPanes();
+    renderExtras();
+    renderComensales();
+    actualizarResumenActual();
+
+    document.querySelector('.armador').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+
+    mostrarToast(`Editando el pedido de ${nombre}`, 'ok');
 }
 
 function renderComanda() {
@@ -363,12 +513,33 @@ function renderComanda() {
                     </div>
                     <div class="ticket__linea-precio">
                         ${formatearPrecio(calcularSubtotalItem(item))}
-                        <button type="button" class="ticket__linea-quitar">✕</button>
+
+                        <div class="ticket__linea-acciones">
+                            <button
+                                type="button"
+                                class="ticket__linea-editar"
+                                title="Editar pedido"
+                            >
+                                Editar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="ticket__linea-quitar"
+                                title="Eliminar pedido"
+                            >
+                                ✕
+                            </button>
+                        </div>
                     </div>
                 `;
                 linea.querySelector('[data-accion="restar"]').addEventListener('click', () => cambiarCantidadItem(nombre, item.id, -1));
                 linea.querySelector('[data-accion="sumar"]').addEventListener('click', () => cambiarCantidadItem(nombre, item.id, 1));
                 linea.querySelector('.ticket__linea-quitar').addEventListener('click', () => eliminarItem(nombre, item.id));
+                linea.querySelector('.ticket__linea-editar').addEventListener(
+                    'click',
+                    () => editarItem(nombre, item.id)
+                );
                 ticket.appendChild(linea);
             });
         }
@@ -439,7 +610,7 @@ function construirMensajeDesglose() {
         estado.comensales[nombre].forEach(item => {
             const precioItem = calcularSubtotalItem(item);
             const nombreLinea = item.cantidad > 1 ? `${item.nombreSandwich} x${item.cantidad}` : item.nombreSandwich;
-            mensaje += `${nombre} - ${nombreLinea} ${formatearPrecio(precioItem)} - envío ${formatearPrecio(envioPorPersona)}\n`;
+            mensaje += `${nombre} - ${nombreLinea} ${formatearPrecio(precioItem)} - envío ${formatearPrecio(envioPorPersona)} = ${formatearPrecio(precioItem + envioPorPersona)}\n`;
         });
     });
 
@@ -620,7 +791,7 @@ function configurarEventos() {
     document.getElementById('btnConsultarDisponibilidad').addEventListener('click', () => abrirModalSucursales('consulta'));
     document.getElementById('btnVerComanda').addEventListener('click', () => {
         document.getElementById('panelComanda').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });    document.getElementById('btnEnviarWhatsapp').addEventListener('click', () => abrirModalSucursales('pedido'));
+    }); document.getElementById('btnEnviarWhatsapp').addEventListener('click', () => abrirModalSucursales('pedido'));
     document.getElementById('btnCerrarModalSucursales').addEventListener('click', cerrarModalSucursales);
     document.getElementById('btnConfirmarSucursal').addEventListener('click', () => {
         const seleccionada = document.querySelector('input[name="sucursal"]:checked');

@@ -608,6 +608,37 @@ input {
     gap: 0.1rem;
 }
 
+.ticket__linea-acciones {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.ticket__linea-editar,
+.ticket__linea-quitar {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.ticket__linea-editar {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.ticket__linea-editar:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.ticket__linea-quitar {
+    padding: 4px;
+    font-size: 0.9rem;
+}
+
 .ticket__linea-nombre {
     font-weight: 700;
     font-size: 0.88rem;

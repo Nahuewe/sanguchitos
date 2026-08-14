@@ -439,6 +439,107 @@ function renderSucursales() {
     });
 }
 
+const modalMenu = document.getElementById('modalMenu');
+const btnVerMenu = document.getElementById('btnVerMenu');
+const btnCerrarModalMenu = document.getElementById('btnCerrarModalMenu');
+const btnCerrarModalMenu2 = document.getElementById('btnCerrarModalMenu2');
+
+function abrirModalMenu() {
+    modalMenu.classList.add('modal--visible');
+    document.body.classList.add('modal-abierto');
+}
+
+function cerrarModalMenu() {
+    modalMenu.classList.remove('modal--visible');
+    document.body.classList.remove('modal-abierto');
+}
+
+btnVerMenu?.addEventListener('click', abrirModalMenu);
+
+btnCerrarModalMenu?.addEventListener('click', cerrarModalMenu);
+
+btnCerrarModalMenu2?.addEventListener('click', cerrarModalMenu);
+
+modalMenu?.addEventListener('click', (event) => {
+    if (event.target === modalMenu) {
+        cerrarModalMenu();
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        cerrarModalMenu();
+    }
+});
+
+function abrirImagen(index) {
+    imagenActual = index;
+
+    const modal = document.getElementById('modalImagen');
+    const imagen = document.getElementById('imagenAmpliada');
+    const contador = document.getElementById('contadorImagen');
+
+    const imagenSeleccionada = imagenesMenu[imagenActual];
+
+    imagen.src = imagenSeleccionada.src;
+    imagen.alt = imagenSeleccionada.alt;
+
+    contador.textContent = `${imagenActual + 1} / ${imagenesMenu.length}`;
+
+    modal.classList.add('modal--visible');
+    document.body.classList.add('modal-abierto');
+}
+
+function cerrarImagen() {
+    document.getElementById('modalImagen').classList.remove('modal--visible');
+    document.body.classList.remove('modal-abierto');
+}
+
+function cambiarImagen(direccion) {
+    imagenActual += direccion;
+
+    if (imagenActual < 0) {
+        imagenActual = imagenesMenu.length - 1;
+    }
+
+    if (imagenActual >= imagenesMenu.length) {
+        imagenActual = 0;
+    }
+
+    const imagen = document.getElementById('imagenAmpliada');
+    const contador = document.getElementById('contadorImagen');
+
+    const imagenSeleccionada = imagenesMenu[imagenActual];
+
+    imagen.src = imagenSeleccionada.src;
+    imagen.alt = imagenSeleccionada.alt;
+
+    contador.textContent = `${imagenActual + 1} / ${imagenesMenu.length}`;
+}
+
+const imagenesMenu = [
+    './sanguches/completos.jpeg',
+    './sanguches/premium.jpeg',
+    './sanguches/clasicos.jpeg',
+    './sanguches/vegetarianos.jpeg',
+    './sanguches/extras.jpeg',
+    './sanguches/combos.jpeg'
+];
+
+function configurarGaleriaMenu() {
+    const imagenes = document.querySelectorAll('.modal-menu__imagen');
+
+    imagenes.forEach((imagen, index) => {
+        imagen.style.cursor = 'pointer';
+
+        imagen.addEventListener('click', () => {
+            const ruta = imagenesMenu[index];
+
+            window.open(ruta, '_blank', 'noopener,noreferrer');
+        });
+    });
+}
+
 function abrirModalSucursales(tipo) {
     if (tipo === 'pedido' && !hayPedidosCargados()) {
         mostrarToast('Todavía no hay ningún sánguche en la comanda', 'error');
@@ -515,6 +616,8 @@ function configurarEventos() {
         if (onConfirmarModal) onConfirmarModal();
         cerrarModalConfirmacion();
     });
+
+    configurarGaleriaMenu();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

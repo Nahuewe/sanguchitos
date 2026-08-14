@@ -7,7 +7,9 @@
     <title>Pedido de sánguches — oficina</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./style/style.css">
 </head>
 
@@ -16,9 +18,11 @@
     <header class="cabecera">
         <div class="cabecera__marca">
             <svg class="cabecera__icono" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M24 6C24 6 14 12 14 24C14 33 18 40 24 42C30 40 34 33 34 24C34 12 24 6 24 6Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-                <path d="M24 10V38" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M24 16C21 16 18.5 17.5 17 19M24 24C21 24 18.5 25.5 17 27M24 32C21 32 18.5 33.5 17 35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M24 6C24 6 14 12 14 24C14 33 18 40 24 42C30 40 34 33 34 24C34 12 24 6 24 6Z"
+                    stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" />
+                <path d="M24 10V38" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M24 16C21 16 18.5 17.5 17 19M24 24C21 24 18.5 25.5 17 27M24 32C21 32 18.5 33.5 17 35"
+                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
             </svg>
             <div class="cabecera__texto">
                 <h1 class="cabecera__logo">Pedido de sánguches</h1>
@@ -32,8 +36,19 @@
     </header>
 
     <div class="barra-consulta">
-        <p class="barra-consulta__texto">¿No sabés qué sánguches y panes tienen hoy?</p>
-        <button type="button" id="btnConsultarDisponibilidad" class="boton-secundario">Preguntar disponibilidad</button>
+        <p class="barra-consulta__texto">
+            ¿No sabés qué sánguches y panes tienen hoy?
+        </p>
+
+        <div class="barra-consulta__acciones">
+            <button type="button" id="btnVerMenu" class="boton-secundario">
+                Ver menú completo
+            </button>
+
+            <button type="button" id="btnConsultarDisponibilidad" class="boton-secundario">
+                Preguntar disponibilidad
+            </button>
+        </div>
     </div>
 
     <main class="mostrador">
@@ -92,8 +107,10 @@
                 <div class="paso__contenido">
                     <h2 class="paso__titulo">Cantidad y agregado</h2>
                     <div class="paso__fila-input">
-                        <input type="number" id="inputCantidad" value="1" min="1" class="input-texto input-texto--corto">
-                        <button type="button" id="btnAgregarItem" class="boton-primario" disabled>Agregar a la comanda</button>
+                        <input type="number" id="inputCantidad" value="1" min="1"
+                            class="input-texto input-texto--corto">
+                        <button type="button" id="btnAgregarItem" class="boton-primario" disabled>Agregar a la
+                            comanda</button>
                     </div>
                     <p id="resumenActual" class="resumen-actual">Elegí un sánguche y un pan para ver el precio.</p>
                 </div>
@@ -108,7 +125,8 @@
             </div>
             <div id="comanda" class="comanda"></div>
             <div class="panel-comanda__pie">
-                <p class="panel-comanda__aviso">El mensaje que se manda al local no lleva nombres ni precios, solo los sánguches.</p>
+                <p class="panel-comanda__aviso">El mensaje que se manda al local no lleva nombres ni precios, solo los
+                    sánguches.</p>
                 <div class="panel-comanda__envio">
                     <label for="inputEnvio">Envío (solo para nosotros)</label>
                     <div class="panel-comanda__envio-input">
@@ -155,6 +173,107 @@
             </div>
         </div>
     </div>
+
+    <div id="modalMenu" class="modal modal-menu">
+        <div class="modal__caja modal-menu__caja">
+
+            <div class="modal-menu__cabecera">
+                <div>
+                    <h3 class="modal__titulo">Menú de sánguches</h3>
+                    <p class="modal-menu__descripcion">
+                        Consultá las opciones disponibles antes de armar tu pedido.
+                    </p>
+                </div>
+
+                <button type="button" id="btnCerrarModalMenu" class="modal-menu__cerrar" aria-label="Cerrar menú">
+                    ×
+                </button>
+            </div>
+
+            <div class="modal-menu__galeria">
+
+                <article class="modal-menu__item">
+                    <img src="./sanguches/completos.jpeg" alt="Sánguches completos" class="modal-menu__imagen">
+                    <h4>Completos</h4>
+                </article>
+
+                <article class="modal-menu__item">
+                    <img src="./sanguches/premium.jpeg" alt="Sánguches premium" class="modal-menu__imagen">
+                    <h4>Premium</h4>
+                </article>
+
+                <article class="modal-menu__item">
+                    <img src="./sanguches/clasicos.jpeg" alt="Sánguches clásicos" class="modal-menu__imagen">
+                    <h4>Clásicos</h4>
+                </article>
+
+                <article class="modal-menu__item">
+                    <img src="./sanguches/vegetarianos.jpeg" alt="Sánguches vegetarianos" class="modal-menu__imagen">
+                    <h4>Vegetarianos</h4>
+                </article>
+
+                <article class="modal-menu__item">
+                    <img src="./sanguches/extras.jpeg" alt="Extras disponibles" class="modal-menu__imagen">
+                    <h4>Extras</h4>
+                </article>
+
+                <article class="modal-menu__item">
+                    <img src="./sanguches/combos.jpeg" alt="Combos disponibles" class="modal-menu__imagen">
+                    <h4>Combos</h4>
+                </article>
+
+            </div>
+
+            <div class="modal__acciones">
+                <button type="button" id="btnCerrarModalMenu2" class="boton-secundario">
+                    Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="modalImagen" class="modal modal-imagen">
+    <div class="modal-imagen__contenido">
+
+        <button
+            type="button"
+            id="btnImagenAnterior"
+            class="modal-imagen__navegacion modal-imagen__anterior"
+            aria-label="Imagen anterior"
+        >
+            ‹
+        </button>
+
+        <img
+            id="imagenAmpliada"
+            class="modal-imagen__img"
+            src=""
+            alt=""
+        >
+
+        <button
+            type="button"
+            id="btnImagenSiguiente"
+            class="modal-imagen__navegacion modal-imagen__siguiente"
+            aria-label="Imagen siguiente"
+        >
+            ›
+        </button>
+
+        <button
+            type="button"
+            id="btnCerrarModalImagen"
+            class="modal-imagen__cerrar"
+            aria-label="Cerrar imagen"
+        >
+            ×
+        </button>
+
+        <div id="contadorImagen" class="modal-imagen__contador"></div>
+
+    </div>
+</div>
 
     <div id="toast" class="toast"></div>
 

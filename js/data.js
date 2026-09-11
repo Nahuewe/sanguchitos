@@ -29,12 +29,12 @@ const CATEGORIAS = {
         etiqueta: 'Clásicos',
         panesIncluidos: ['Miga', 'Pebete', 'Francés'],
         sanguches: [
-            { id: 'el-clasico', nombre: 'El Clásico', precio: 3800, descripcion: 'Jamón cocido y queso tybo.' },
-            { id: 'salamero', nombre: 'Salamero', precio: 3800, descripcion: 'Salame y queso tybo.' },
-            { id: 'la-fresca', nombre: 'La Fresca', precio: 4600, descripcion: 'Ternera jugosa y tomate.' },
-            { id: 'bondiola-campestre', nombre: 'Bondiola Campestre', precio: 4600, descripcion: 'Bondiola y queso tybo.' },
-            { id: 'la-tradicione', nombre: 'La Tradicione', precio: 4600, descripcion: 'Mortadela y queso tybo.' },
-            { id: 'longaniza', nombre: 'Longaniza', precio: 4600, descripcion: 'Salamín y queso tybo.' }
+            { id: 'el-clasico', nombre: 'El Clásico', precio: 4100, descripcion: 'Jamón cocido y queso tybo.' },
+            { id: 'salamero', nombre: 'Salamero', precio: 4100, descripcion: 'Salame y queso tybo.' },
+            { id: 'la-fresca', nombre: 'La Fresca', precio: 5200, descripcion: 'Ternera jugosa y tomate.' },
+            { id: 'bondiola-campestre', nombre: 'Bondiola Campestre', precio: 4900, descripcion: 'Bondiola y queso tybo.' },
+            { id: 'la-tradicione', nombre: 'La Tradicione', precio: 4900, descripcion: 'Mortadela y queso tybo.' },
+            { id: 'longaniza', nombre: 'Longaniza', precio: 4900, descripcion: 'Salamín y queso tybo.' }
         ]
     },
     vegetarianos: {
@@ -52,27 +52,27 @@ const CATEGORIAS = {
         etiqueta: 'Completos',
         panesIncluidos: ['Miga', 'Pebete', 'Francés', 'Ciabatta', 'Baguette'],
         sanguches: [
-            { id: 'perfecto-tipico', nombre: 'Perfecto Típico', precio: 5500, descripcion: 'Ternera, lechuga, huevo y aceitunas.' },
-            { id: 'ahumado', nombre: 'Ahumado', precio: 5900, descripcion: 'Ternera, queso tybo, morrón ahumado y huevo.' },
-            { id: 'casero', nombre: 'Casero', precio: 5500, descripcion: 'Jamón cocido, tomate, huevo y aceituna.' },
-            { id: 'especial-cocido', nombre: 'Especial Cocido', precio: 5700, descripcion: 'Jamón cocido, queso tybo, huevo, morrón ahumado y aceitunas.' },
-            { id: 'la-cremosa', nombre: 'La Cremosa', precio: 5900, descripcion: 'Pollo, queso crema, huevo y aceitunas.' },
-            { id: 'crema-de-verdeo', nombre: 'Crema de Verdeo', precio: 5500, descripcion: 'Jamón, queso tybo, queso crema, verdeo y huevo.' },
-            { id: 'lengudo', nombre: 'Lengudo', precio: 5500, descripcion: 'Lengua a la vinagreta, lechuga y tomate.' }
+            { id: 'perfecto-tipico', nombre: 'Perfecto Típico', precio: 6200, descripcion: 'Ternera, lechuga, huevo y aceitunas.' },
+            { id: 'ahumado', nombre: 'Ahumado', precio: 6600, descripcion: 'Ternera, queso tybo, morrón ahumado y huevo.' },
+            { id: 'casero', nombre: 'Casero', precio: 6200, descripcion: 'Jamón cocido, tomate, huevo y aceituna.' },
+            { id: 'especial-cocido', nombre: 'Especial Cocido', precio: 6400, descripcion: 'Jamón cocido, queso tybo, huevo, morrón ahumado y aceitunas.' },
+            { id: 'la-cremosa', nombre: 'La Cremosa', precio: 6600, descripcion: 'Pollo, queso crema, huevo y aceitunas.' },
+            { id: 'crema-de-verdeo', nombre: 'Crema de Verdeo', precio: 5900, descripcion: 'Jamón, queso tybo, queso crema, verdeo y huevo.' },
+            { id: 'lengudo', nombre: 'Lengudo', precio: 6200, descripcion: 'Lengua a la vinagreta, lechuga y tomate.' }
         ]
     },
     premium: {
         etiqueta: 'Premium',
         panesIncluidos: ['Miga', 'Pebete', 'Francés', 'Ciabatta', 'Baguette', 'Focaccia'],
         sanguches: [
-            { id: 'miga-toscano', nombre: 'Miga Toscano', precio: 7200, descripcion: 'Jamón crudo, rúcula fresca, queso tybo, pesto de albahaca, aceitunas.' },
-            { id: 'el-italiano', nombre: 'El Italiano', precio: 6900, descripcion: 'Mortadela, queso tybo, pesto de albahaca, aceitunas.' },
-            { id: 'mediterraneo', nombre: 'Mediterráneo', precio: 7500, descripcion: 'Jamón crudo, tomate fresco, palta y aceitunas.' },
-            { id: 'bondi-ahumada', nombre: 'Bondi Ahumada', precio: 6900, descripcion: 'Bondiola, queso tybo, morrón ahumado.' },
-            { id: 'tio-golf', nombre: 'Tío Golf', precio: 7500, descripcion: 'Jamón cocido, palmitos, huevo, salsa golf.' },
-            { id: 'tropical-cocido', nombre: 'Tropical Cocido', precio: 7200, descripcion: 'Jamón cocido, queso tybo, ananá.' },
-            { id: 'azul-fresco', nombre: 'Azul Fresco', precio: 6900, descripcion: 'Jamón cocido, rúcula, roquefort.' },
-            { id: 'trapezzino', nombre: 'Trapezzino', precio: 7200, descripcion: 'Ternera, cheddar, cebolla caramelizada, salsa barbacoa.' }
+            { id: 'miga-toscano', nombre: 'Miga Toscano', precio: 7800, descripcion: 'Jamón crudo, rúcula fresca, queso tybo, pesto de albahaca, aceitunas.' },
+            { id: 'el-italiano', nombre: 'El Italiano', precio: 7500, descripcion: 'Mortadela, queso tybo, pesto de albahaca, aceitunas.' },
+            { id: 'mediterraneo', nombre: 'Mediterráneo', precio: 8100, descripcion: 'Jamón crudo, tomate fresco, palta y aceitunas.' },
+            { id: 'bondi-ahumada', nombre: 'Bondi Ahumada', precio: 7500, descripcion: 'Bondiola, queso tybo, morrón ahumado.' },
+            { id: 'tio-golf', nombre: 'Tío Golf', precio: 8100, descripcion: 'Jamón cocido, palmitos, huevo, salsa golf.' },
+            { id: 'tropical-cocido', nombre: 'Tropical Cocido', precio: 7800, descripcion: 'Jamón cocido, queso tybo, ananá.' },
+            { id: 'azul-fresco', nombre: 'Azul Fresco', precio: 7500, descripcion: 'Jamón cocido, rúcula, roquefort.' },
+            { id: 'trapezzino', nombre: 'Trapezzino', precio: 8100, descripcion: 'Ternera, cheddar, cebolla caramelizada, salsa barbacoa.' }
         ]
     }
 };

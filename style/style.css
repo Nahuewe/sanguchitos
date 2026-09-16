@@ -834,6 +834,38 @@ input {
     box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
 }
 
+.panel-comanda__botones-pedido,
+.panel-comanda__botones-desglose {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.panel-comanda__botones-pedido .boton-whatsapp,
+.panel-comanda__botones-desglose .boton-desglose {
+    width: 100%;
+}
+
+.boton-copiar {
+    border: 2px solid var(--tinta);
+    background: var(--crema);
+    color: var(--tinta);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    white-space: nowrap;
+}
+
+.boton-copiar:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+
 .modal {
     display: none;
     position: fixed;

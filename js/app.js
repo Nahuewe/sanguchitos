@@ -582,16 +582,45 @@ function consolidarItemsPedido() {
     return Array.from(resumen.values());
 }
 
+function consolidarItemsPedidoConPrecios() {
+    const resumen = new Map();
+
+    estado.ordenComensales.forEach(nombre => {
+        (estado.comensales[nombre] || []).forEach(item => {
+            const extrasTexto = item.extras.length ? item.extras.map(e => e.nombre).sort().join(', ') : '';
+            const clave = `${item.nombreSandwich}|${item.pan}|${extrasTexto}`;
+            if (!resumen.has(clave)) {
+                resumen.set(clave, {
+                    nombreSandwich: item.nombreSandwich,
+                    pan: item.pan,
+                    precioPan: item.precioPan,
+                    extras: item.extras,
+                    extrasTexto,
+                    precioSandwich: item.precioSandwich,
+                    cantidad: 0
+                });
+            }
+            resumen.get(clave).cantidad += item.cantidad;
+        });
+    });
+
+    return Array.from(resumen.values());
+}
+
 function construirMensajePedido() {
-    const lineas = consolidarItemsPedido();
+    const lineas = consolidarItemsPedidoConPrecios();
     let mensaje = 'Buen día! Quisiéramos encargar lo siguiente:\n\n';
 
     lineas.forEach(linea => {
-        mensaje += `${linea.cantidad}x ${linea.nombreSandwich} — pan ${linea.pan}\n`;
-        if (linea.extras) mensaje += `   Extras: ${linea.extras}\n`;
+        const precioUnidad = linea.precioSandwich + linea.precioPan + linea.extras.reduce((sum, e) => sum + e.precio, 0);
+        const precioTotal = precioUnidad * linea.cantidad;
+        mensaje += `${linea.cantidad}x ${linea.nombreSandwich} — pan ${linea.pan} — ${formatearPrecio(precioTotal)}\n`;
+        if (linea.extrasTexto) mensaje += `   Extras: ${linea.extrasTexto}\n`;
     });
 
-    mensaje += '\n¿A qué hora estaría listo? Muchas gracias!';
+    const subtotal = calcularSubtotalSanguches();
+    mensaje += `\nTotal sánguches: ${formatearPrecio(subtotal)}`;
+    mensaje += '\n\n¿A qué hora estaría listo? Muchas gracias!';
     return mensaje;
 }
 
@@ -607,20 +636,37 @@ function construirMensajeDesglose() {
     let mensaje = 'Desglose de pagos — sánguches de la oficina\n\n';
 
     comensalesConItems.forEach(nombre => {
+        const subtotalComensal = calcularSubtotalComensal(nombre);
+        const totalComensal = subtotalComensal + envioPorPersona;
+        mensaje += `📌 ${nombre}\n`;
         estado.comensales[nombre].forEach(item => {
             const precioItem = calcularSubtotalItem(item);
-            const nombreLinea = item.cantidad > 1 ? `${item.nombreSandwich} x${item.cantidad}` : item.nombreSandwich;
-            mensaje += `${nombre} - ${nombreLinea} ${formatearPrecio(precioItem)} - envío ${formatearPrecio(envioPorPersona)} = ${formatearPrecio(precioItem + envioPorPersona)}\n`;
+            const extrasTexto = item.extras.length ? ` + extras: ${item.extras.map(e => e.nombre).join(', ')}` : '';
+            const panTexto = item.precioPan > 0 ? ` + pan ${item.pan} (${formatearPrecio(item.precioPan)})` : ` — pan ${item.pan}`;
+            const nombreLinea = item.cantidad > 1 ? `${item.cantidad}x ${item.nombreSandwich}` : item.nombreSandwich;
+            mensaje += `  ${nombreLinea}${panTexto}${extrasTexto} → ${formatearPrecio(precioItem)}\n`;
         });
+        if (envioPorPersona > 0) {
+            mensaje += `  Envío → ${formatearPrecio(envioPorPersona)}\n`;
+        }
+        mensaje += `  Total ${nombre}: ${formatearPrecio(totalComensal)}\n\n`;
     });
 
-    mensaje += `\nTotal a cobrar entre todos: ${formatearPrecio(calcularTotalGeneral())}`;
+    mensaje += `Total a cobrar entre todos: ${formatearPrecio(calcularTotalGeneral())}`;
     return mensaje;
 }
 
 function enviarWhatsapp(numero, mensaje) {
     const url = 'https://api.whatsapp.com/send?phone=' + numero + '&text=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
+}
+
+function copiarAlPortapapeles(texto, exito) {
+    navigator.clipboard.writeText(texto).then(() => {
+        mostrarToast(exito, 'ok');
+    }).catch(() => {
+        mostrarToast('No se pudo copiar. Intentá de nuevo.', 'error');
+    });
 }
 
 function renderSucursales() {
@@ -792,6 +838,13 @@ function configurarEventos() {
     document.getElementById('btnVerComanda').addEventListener('click', () => {
         document.getElementById('panelComanda').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }); document.getElementById('btnEnviarWhatsapp').addEventListener('click', () => abrirModalSucursales('pedido'));
+    document.getElementById('btnCopiarPedido').addEventListener('click', () => {
+        if (!hayPedidosCargados()) {
+            mostrarToast('Todavía no hay ningún sánguche en la comanda', 'error');
+            return;
+        }
+        copiarAlPortapapeles(construirMensajePedido(), 'Mensaje del pedido copiado');
+    });
     document.getElementById('btnCerrarModalSucursales').addEventListener('click', cerrarModalSucursales);
     document.getElementById('btnConfirmarSucursal').addEventListener('click', () => {
         const seleccionada = document.querySelector('input[name="sucursal"]:checked');
@@ -821,6 +874,14 @@ function configurarEventos() {
             return;
         }
         enviarWhatsapp(numero, construirMensajeDesglose());
+    });
+
+    document.getElementById('btnCopiarDesglose').addEventListener('click', () => {
+        if (!hayPedidosCargados()) {
+            mostrarToast('Todavía no hay ningún sánguche en la comanda', 'error');
+            return;
+        }
+        copiarAlPortapapeles(construirMensajeDesglose(), 'Desglose copiado');
     });
 
     document.getElementById('btnCancelarConfirmacion').addEventListener('click', cerrarModalConfirmacion);

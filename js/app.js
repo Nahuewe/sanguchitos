@@ -609,18 +609,15 @@ function consolidarItemsPedidoConPrecios() {
 
 function construirMensajePedido() {
     const lineas = consolidarItemsPedidoConPrecios();
-    let mensaje = 'Buen día! Quisiéramos encargar lo siguiente:\n\n';
+    let mensaje = 'Quisiéramos encargar lo siguiente:\n\n';
 
     lineas.forEach(linea => {
-        const precioUnidad = linea.precioSandwich + linea.precioPan + linea.extras.reduce((sum, e) => sum + e.precio, 0);
-        const precioTotal = precioUnidad * linea.cantidad;
-        mensaje += `${linea.cantidad}x ${linea.nombreSandwich} — pan ${linea.pan} — ${formatearPrecio(precioTotal)}\n`;
+        mensaje += `${linea.cantidad}x ${linea.nombreSandwich} — pan ${linea.pan}\n`;
         if (linea.extrasTexto) mensaje += `   Extras: ${linea.extrasTexto}\n`;
     });
 
-    const subtotal = calcularSubtotalSanguches();
-    mensaje += `\nTotal sánguches: ${formatearPrecio(subtotal)}`;
-    mensaje += '\n\n¿A qué hora estaría listo? Muchas gracias!';
+    mensaje += `\nPara enviar el pedido al Nodo Tecnologico`;
+    mensaje += '\n\n¿A qué hora estaría listo y cuanto seria todo? Muchas gracias!';
     return mensaje;
 }
 
